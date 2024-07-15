@@ -15,6 +15,7 @@ export default function AddressInputs({
         value={phone || ""}
         onChange={(ev) => setAddressProp("phone", ev.target.value)}
       />
+
       <label>Street address</label>
       <input
         disabled={disabled}
@@ -23,7 +24,8 @@ export default function AddressInputs({
         value={streetAddress || ""}
         onChange={(ev) => setAddressProp("streetAddress", ev.target.value)}
       />
-      <div className="grid grid-cols-2 gap-2">
+
+      <div className="grid sm:grid-cols-2 sm:gap-2 ">
         <div>
           <label>Postal code</label>
           <input
@@ -45,6 +47,7 @@ export default function AddressInputs({
           />
         </div>
       </div>
+
       <label>Country</label>
       <input
         disabled={disabled}
