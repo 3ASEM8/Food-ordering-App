@@ -1,8 +1,12 @@
 import AddToCartButton from "@/components/menu/AddToCartButton";
-
 import Image from "next/image";
 
-export default function MenuItemTile({ onAddToCart, ...item }) {
+export default function MenuItemTile({
+  showPopup,
+  hasOptions,
+  onAddToCart,
+  ...item
+}) {
   const { image, description, name, basePrice, sizes, extraIngredientPrices } =
     item;
 
@@ -11,8 +15,9 @@ export default function MenuItemTile({ onAddToCart, ...item }) {
 
   return (
     <div
-      className="bg-gray-200 p-4 rounded-lg text-center
-      group hover:bg-white hover:shadow-md hover:shadow-black/25 transition-all"
+      className={`bg-gray-200 p-4 rounded-lg text-center
+      group hover:bg-white hover:shadow-md hover:shadow-black/25 transition-all
+      ${showPopup ? "pointer-events-none opacity-0" : ""}`}
     >
       <div className="text-center">
         <Image
@@ -30,6 +35,8 @@ export default function MenuItemTile({ onAddToCart, ...item }) {
         hasSizesOrExtras={hasSizesOrExtras}
         onClick={onAddToCart}
         basePrice={basePrice}
+        hasOptions={hasOptions}
+        disabled={showPopup}
       />
     </div>
   );

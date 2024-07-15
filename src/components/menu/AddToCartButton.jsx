@@ -1,27 +1,26 @@
-// import FlyingButton from "react-flying-item";
-
 export default function AddToCartButton({
   hasSizesOrExtras,
   onClick,
   basePrice,
   image,
+  disabled, // إضافة خاصية disabled
 }) {
-  if (!hasSizesOrExtras) {
-    return (
-      <div className="flying-button-parent mt-4">
-        <button targetTop={"5%"} targetLeft={"95%"} src={image}>
-          <div onClick={onClick}>Add to cart ${basePrice}</div>
-        </button>
-      </div>
-    );
-  }
+  const handleClick = () => {
+    onClick();
+  };
+
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="mt-4 bg-primary text-white rounded-full px-8 py-2"
-    >
-      <span>Add to cart (from ${basePrice})</span>
-    </button>
+    <div className="flying-button-parent mt-4">
+      <button
+        onClick={handleClick}
+        className={`mt-4 bg-primary text-white rounded-full px-8 py-2 cursor-pointer
+          ${disabled ? "pointer-events-none opacity-50" : ""}`}
+      >
+        <span>
+          Add to cart{" "}
+          {hasSizesOrExtras ? `(from $${basePrice})` : `$${basePrice}`}
+        </span>
+      </button>
+    </div>
   );
 }

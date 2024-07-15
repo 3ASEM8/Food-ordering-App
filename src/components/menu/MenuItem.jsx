@@ -2,27 +2,41 @@ import { CartContext } from "@/components/AppContext";
 import MenuItemTile from "@/components/menu/MenuItemTile";
 import Image from "next/image";
 import { useContext, useState } from "react";
-// import FlyingButton from "react-flying-item";
+import { toast } from "react-hot-toast";
 
 export default function MenuItem(menuItem) {
   const { image, name, description, basePrice, sizes, extraIngredientPrices } =
     menuItem;
 
   const [selectedSize, setSelectedSize] = useState(sizes?.[0] || null);
-
   const [selectedExtras, setSelectedExtras] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const { addToCart } = useContext(CartContext);
 
+  const hasOptions = sizes.length > 0 || extraIngredientPrices.length > 0;
+
   async function handleAddToCartButtonClick() {
     console.log("add to cart");
-    const hasOptions = sizes.length > 0 || extraIngredientPrices.length > 0;
+
     if (hasOptions && !showPopup) {
       setShowPopup(true);
       return;
     }
+
+    // إضافة المنتج إلى السلة
     addToCart(menuItem, selectedSize, selectedExtras);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    // إظهار رسالة النجاح بعد إغلاق البوباب
+    if (!hasOptions) {
+      toast.success(
+        `Item added to cart for $${
+          basePrice +
+          (selectedSize ? selectedSize.price : 0) +
+          selectedExtras.reduce((total, extra) => total + extra.price, 0)
+        }`
+      );
+    }
+
     console.log("hiding popup");
     setShowPopup(false);
   }
@@ -117,14 +131,13 @@ export default function MenuItem(menuItem) {
                 </div>
               )}
 
-              <button targetTop={"5%"} targetLeft={"95%"} src={image}>
-                <div
-                  className="primary sticky bottom-2"
-                  onClick={handleAddToCartButtonClick}
-                >
-                  Add to cart ${selectedPrice}
-                </div>
+              <button
+                onClick={handleAddToCartButtonClick}
+                className="mt-4 bg-primary text-white rounded-full px-8 py-2"
+              >
+                Add to cart ${selectedPrice}
               </button>
+
               <button className="mt-2" onClick={() => setShowPopup(false)}>
                 Cancel
               </button>
@@ -133,7 +146,14 @@ export default function MenuItem(menuItem) {
         </div>
       )}
 
-      <MenuItemTile onAddToCart={handleAddToCartButtonClick} {...menuItem} />
+      <MenuItemTile
+        showPopup={showPopup}
+        hasOptions={hasOptions}
+        onAddToCart={handleAddToCartButtonClick}
+        {...menuItem}
+        // تمكين/تعطيل الزر بناءً على حالة البوباب
+        disabled={showPopup}
+      />
     </>
   );
 }

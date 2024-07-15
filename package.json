@@ -13,6 +13,7 @@
     "@uploadthing/react": "^6.7.2",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
+    "framer-motion": "^11.3.2",
     "micro": "^10.0.1",
     "mongodb": "^6.8.0",
     "mongoose": "^8.5.0",
